@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.1.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task-4.1.xsd"
+        >
+
+    <context:component-scan base-package="com.lin.mqss"/>
+
+    <context:property-placeholder location="classpath:application.properties"/>
+
+    <!--<import resource="spring-elastic-job.xml"/>-->
+
+    <!-- 重连策略 -->
+    <!--<bean id="retryPolicy" class="org.apache.curator.retry.ExponentialBackoffRetry">-->
+        <!--<constructor-arg index="0" value="1000" /> &lt;!&ndash; 间隔时间基数 &ndash;&gt;-->
+        <!--<constructor-arg index="1" value="3" />&lt;!&ndash; 最多重试几次 &ndash;&gt;-->
+    <!--</bean>-->
+
+    <!--<bean id="curatorClient" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient" init-method="start">-->
+        <!--<constructor-arg index="0" value="${curator.server.list}" />-->
+        <!--<constructor-arg index="1" value="${curator.session.timeout}" />&lt;!&ndash; sessionTimeoutMs会话超时时间，单位为毫秒。默认是60000ms  &ndash;&gt;-->
+        <!--<constructor-arg index="2" value="${curator.connection.timeout}" />&lt;!&ndash; connectionTimeoutMs连接创建超时时间，单位毫秒，默认15000ms &ndash;&gt;-->
+        <!--<constructor-arg index="3" ref="retryPolicy" />-->
+    <!--</bean>-->
+
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- 方法运行效率监控 -->
+	<!-- <bean id="performanceMonitor" class="com.mljr.protoss.application.aspect.PerformanceMonitorInterceptor"/>
+	<aop:config>
+		<aop:pointcut expression="execution (* com.mljr.protoss.arbiter.biz.*.*(..)) or execution (* com.mljr.protoss.*.service.impl.*.*(..))" id="allServiceMethods"/>
+		<aop:advisor advice-ref="performanceMonitor" pointcut-ref="allServiceMethods" order="2"/>
+	</aop:config> -->
+	
+    <task:executor id="myExecutor" pool-size="10"  />
+    <task:executor id="otherExecutor" pool-size="5" />
+    <task:annotation-driven executor="myExecutor"/>
+</beans>
