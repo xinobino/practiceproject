@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MqApplication {
 
     public static void main(String[] args) {
+        System.out.println("123");
         SpringApplication.run(MqApplication.class, args);
     }
 }
